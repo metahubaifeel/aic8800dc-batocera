@@ -1,5 +1,8 @@
 # AIC8800DC 无线网卡驱动（USB 2357:0147）：Linux / Batocera 免砖移植
 
+[![Release](https://img.shields.io/github/v/release/metahubaifeel/aic8800dc-batocera?label=release)](https://github.com/metahubaifeel/aic8800dc-batocera/releases)
+[![License: GPL-2.0](https://img.shields.io/badge/license-GPL--2.0-blue)](LICENSE)
+
 > 一块二十来块的 USB WiFi 网卡（AIC8800DC 芯片，USB ID `2357:0147`），
 > 用官方驱动加载会**当场假死变砖**（只能拔下来断电十秒才能救活），
 > 在 Batocera 这类只读系统上更是完全没法用。
@@ -90,7 +93,7 @@ legacy 流程在系统配置阶段需要读-改-写一个缓存控制寄存器�
 
 ## 3. 补丁一览
 
-补丁文件： [`patch/aic8800dc-mcu1-support.patch`](patch/aic8800dc-mcu1-support.patch)（unified diff，`-p1` 可用）
+补丁文件： [`patch/aic8800dc-mcu1-support.patch`](patch/aic8800dc-mcu1-support.patch)（unified diff，`-p1` 可用），也可从 [Releases](https://github.com/metahubaifeel/aic8800dc-batocera/releases) 直接下载
 改好的完整文件： [`patched-files/`](patched-files/)（直接覆盖同名文件即可）
 
 | 文件 | 改动 | 作用 |
@@ -206,7 +209,7 @@ touch /userdata/system/aic8800/enable-autostart
 
 ## 7. 已知问题
 
-- **上游未合并**：本补丁基于 `ronnyf/AIC8800-Linux-Driver`（v6.4.3.0-ronnyf）。上游代码在动，patch 可能不直接 apply，`patched-files/` 里的完整文件以对应版本为准。
+- **上游未合并**：本补丁基于 `ronnyf/AIC8800-Linux-Driver`（v6.4.3.0-ronnyf），并已[向上游提交 issue #32](https://github.com/ronnyf/AIC8800-Linux-Driver/issues/32) 提议合并。上游代码在动，patch 可能不直接 apply，`patched-files/` 里的完整文件以对应版本为准。
 - **DPD 校准被跳过**：`aicwf_dpd_fw_calib=0` 意味着不做出厂校准。实测日常使用（连接、速率、稳定度）无感知差异；如果你的卡校准数据本来就有效（boot-arg bit4 置位），legacy 检测会自动识别并将 `valid_out=1`，行为与正常一致。
 - connman 接管瞬间的偶发段错误未根治（看门狗兜底）。
 - 只测了 `2357:0147` 这一个 ID / MCU1 批次；MCU2 及 D80 不需要本补丁。

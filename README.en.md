@@ -1,5 +1,8 @@
 # AIC8800DC USB WiFi driver (2357:0147): unbricked on Linux / Batocera
 
+[![Release](https://img.shields.io/github/v/release/metahubaifeel/aic8800dc-batocera?label=release)](https://github.com/metahubaifeel/aic8800dc-batocera/releases)
+[![License: GPL-2.0](https://img.shields.io/badge/license-GPL--2.0-blue)](LICENSE)
+
 > A ~$3 USB WiFi dongle (AIC8800DC, USB ID `2357:0147`) that **hard-hangs the
 > moment the vendor driver loads** — recoverable only by physically unplugging
 > it for 10+ seconds. Completely unusable on read-only distros like Batocera.
@@ -66,6 +69,8 @@ cd AIC8800-Linux-Driver
 patch -p1 < /path/to/aic8800dc-mcu1-support.patch
 ```
 
+The patch lives in this repo and is also attached to [Releases](https://github.com/metahubaifeel/aic8800dc-batocera/releases).
+
 Build with a kernel tree configured **with your target machine's defconfig**
 (otherwise `struct module` layout mismatch → `Number of configurations: 0`).
 See [build/build-notes.md](build/build-notes.md).
@@ -104,6 +109,7 @@ insmod aic8800_fdrv.ko aic_fw_path=/path/to/fw
 
 ## Known limitations
 
+- Not merged upstream yet — the problem and fix are documented in [ronnyf/AIC8800-Linux-Driver#32](https://github.com/ronnyf/AIC8800-Linux-Driver/issues/32); use the patch here until then.
 - Targets the `2357:0147` / MCU1 batch only; D80 / MCU2 chips don't need it.
 - DPD calibration is skipped by default (no observed impact; legacy validity
   check still reports `valid_out=1` on chips with factory calibration).
