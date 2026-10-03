@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 580" font-family="system-ui,-apple-system,'Segoe UI',sans-serif">
+  <rect width="960" height="580" fill="#ffffff"/>
+  <text x="480" y="42" text-anchor="middle" font-size="26" font-weight="700" fill="#1f2328">Batocera boot timeline: two timing traps</text>
+  <text x="480" y="68" text-anchor="middle" font-size="15" fill="#656d76">The driver works — but it does not line up with Batocera's boot scripts; a relay is needed</text>
+
+  <rect x="30" y="86" width="432" height="82" rx="10" fill="#ffebe9" stroke="#ff8182" stroke-width="1.5"/>
+  <text x="46" y="112" font-size="15" font-weight="700" fill="#cf222e">Trap 1 | At S00 (t=0) /userdata is not mounted</text>
+  <text x="46" y="136" font-size="13" fill="#1f2328">It mounts at ~33 s. Waiting for it at S00</text>
+  <text x="46" y="156" font-size="13" fill="#1f2328">deadlocks the very scripts that mount it.</text>
+
+  <rect x="498" y="86" width="432" height="82" rx="10" fill="#ffebe9" stroke="#ff8182" stroke-width="1.5"/>
+  <text x="514" y="112" font-size="15" font-weight="700" fill="#cf222e">Trap 2 | S08connman waits only 15 s for wlan0</text>
+  <text x="514" y="136" font-size="13" fill="#1f2328">Driver loads at ~30 s → always too late,</text>
+  <text x="514" y="156" font-size="13" fill="#1f2328">"Wifi Hardware not detected after 15s"</text>
+
+  <line x1="90" y1="345" x2="920" y2="345" stroke="#656d76" stroke-width="2"/>
+  <path d="M920,345 L908,340 L908,350 Z" fill="#656d76"/>
+  <text x="930" y="350" font-size="13" fill="#656d76">s</text>
+
+  <circle cx="90" cy="345" r="6" fill="#0969da"/>
+  <line x1="90" y1="339" x2="90" y2="316" stroke="#0969da" stroke-width="1.5"/>
+  <rect x="60" y="252" width="262" height="62" rx="8" fill="#ddf4ff" stroke="#54aeff" stroke-width="1.2"/>
+  <text x="74" y="276" font-size="14" font-weight="700" fill="#0969da">0s | S00  boot-custom.sh</text>
+  <text x="74" y="298" font-size="12.5" fill="#1f2328">write udev rule + spawn bg script</text>
+
+  <circle cx="252" cy="345" r="6" fill="#656d76"/>
+  <line x1="252" y1="351" x2="252" y2="374" stroke="#656d76" stroke-width="1.5"/>
+  <rect x="222" y="376" width="244" height="62" rx="8" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.2"/>
+  <text x="236" y="400" font-size="14" font-weight="700" fill="#57606a">10s | S08connman starts</text>
+  <text x="236" y="422" font-size="12.5" fill="#1f2328">waits for wlan0 (max 15 s)</text>
+
+  <circle cx="495" cy="345" r="6" fill="#cf222e"/>
+  <line x1="495" y1="339" x2="495" y2="316" stroke="#cf222e" stroke-width="1.5"/>
+  <rect x="465" y="252" width="232" height="62" rx="8" fill="#ffebe9" stroke="#ff8182" stroke-width="1.2"/>
+  <text x="479" y="276" font-size="14" font-weight="700" fill="#cf222e">25s | ⚠️ S08 gives up</text>
+  <text x="479" y="298" font-size="12.5" fill="#1f2328">wlan0 never appeared</text>
+
+  <circle cx="625" cy="345" r="6" fill="#0969da"/>
+  <circle cx="657" cy="345" r="6" fill="#0969da"/>
+  <line x1="625" y1="351" x2="625" y2="374" stroke="#0969da" stroke-width="1.5"/>
+  <line x1="657" y1="351" x2="657" y2="374" stroke="#0969da" stroke-width="1.5"/>
+  <rect x="595" y="376" width="316" height="78" rx="8" fill="#ddf4ff" stroke="#54aeff" stroke-width="1.2"/>
+  <text x="609" y="400" font-size="13" font-weight="700" fill="#0969da">33s | /userdata mounted</text>
+  <text x="609" y="422" font-size="13" fill="#1f2328">35s | boot-late.sh kicks in:</text>
+  <text x="609" y="442" font-size="13" fill="#1f2328">eject → insmod the driver</text>
+
+  <circle cx="819" cy="345" r="6" fill="#1a7f37"/>
+  <line x1="819" y1="339" x2="819" y2="316" stroke="#1a7f37" stroke-width="1.5"/>
+  <rect x="789" y="252" width="152" height="62" rx="8" fill="#dafbe1" stroke="#4ac26b" stroke-width="1.2"/>
+  <text x="801" y="276" font-size="13.5" font-weight="700" fill="#1a7f37">45s | ✓ wlan0 ready</text>
+  <text x="801" y="298" font-size="12.5" fill="#1f2328">WiFi connects</text>
+
+  <rect x="150" y="492" width="660" height="54" rx="10" fill="#1a7f37"/>
+  <text x="480" y="516" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">Result: fully automatic — boot to WiFi with zero human action</text>
+  <text x="480" y="536" text-anchor="middle" font-size="12" fill="#dafbe1">(no-Ethernet boots: boot-late.sh force-connects the saved WiFi)</text>
+</svg>

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 430" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="960" height="430" fill="#ffffff"/>
+  <text x="480" y="42" text-anchor="middle" font-size="26" font-weight="700" fill="#1f2328">实测验证结果</text>
+  <text x="480" y="70" text-anchor="middle" font-size="15" fill="#656d76">2026-10 ｜ Batocera 43.1 ｜ 内核 6.18.16 ｜ x86_64 ｜ 真实游戏机（E3-1275）</text>
+
+  <rect x="80" y="95" width="800" height="58" rx="10" fill="#dafbe1" stroke="#4ac26b" stroke-width="1.3"/>
+  <text x="108" y="130" font-size="19" font-weight="700" fill="#1a7f37">✓</text>
+  <text x="140" y="123" font-size="15" fill="#1f2328">冷启动全自动：开机 → 自动切网卡模式 → 自动加载驱动 → wlan0 创建</text>
+  <text x="140" y="143" font-size="12.5" fill="#656d76">开机日志：insmod done; wlan=1 —— 全程无人操作</text>
+
+  <rect x="80" y="165" width="800" height="58" rx="10" fill="#dafbe1" stroke="#4ac26b" stroke-width="1.3"/>
+  <text x="108" y="200" font-size="19" font-weight="700" fill="#1a7f37">✓</text>
+  <text x="140" y="193" font-size="15" fill="#1f2328">驱动启动：Start app 0.3 秒成功（修复前：4 秒超时 + 芯片假死）</text>
+  <text x="140" y="213" font-size="12.5" fill="#656d76">同样的卡、同样的驱动源码，只有补丁不同</text>
+
+  <rect x="80" y="235" width="800" height="58" rx="10" fill="#dafbe1" stroke="#4ac26b" stroke-width="1.3"/>
+  <text x="108" y="270" font-size="19" font-weight="700" fill="#1a7f37">✓</text>
+  <text x="140" y="263" font-size="15" fill="#1f2328">WiFi 连接：WPA2 四步握手 + DHCP 拿 IP 正常</text>
+  <text x="140" y="283" font-size="12.5" fill="#656d76">代理链路（http_proxy）经无线访问外网正常</text>
+
+  <rect x="80" y="305" width="800" height="58" rx="10" fill="#dafbe1" stroke="#4ac26b" stroke-width="1.3"/>
+  <text x="108" y="340" font-size="19" font-weight="700" fill="#1a7f37">✓</text>
+  <text x="140" y="333" font-size="15" fill="#1f2328">拔网线实测：connman 自动切到 WiFi，网关 / 外网 / DNS / 代理全通</text>
+  <text x="140" y="353" font-size="12.5" fill="#656d76">有线地址消失、无线地址接管，无需人工干预</text>
+
+  <rect x="80" y="375" width="800" height="42" rx="10" fill="#dafbe1" stroke="#4ac26b" stroke-width="1.3"/>
+  <text x="108" y="402" font-size="19" font-weight="700" fill="#1a7f37">✓</text>
+  <text x="140" y="402" font-size="15" fill="#1f2328">断电重启：WiFi 凭据不丢，开机自动重连</text>
+</svg>

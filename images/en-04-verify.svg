@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 430" font-family="system-ui,-apple-system,'Segoe UI',sans-serif">
+  <rect width="960" height="430" fill="#ffffff"/>
+  <text x="480" y="42" text-anchor="middle" font-size="26" font-weight="700" fill="#1f2328">Verified results</text>
+  <text x="480" y="70" text-anchor="middle" font-size="15" fill="#656d76">2026-10 | Batocera 43.1 | kernel 6.18.16 | x86_64 | real console (E3-1275)</text>
+
+  <rect x="80" y="95" width="800" height="58" rx="10" fill="#dafbe1" stroke="#4ac26b" stroke-width="1.3"/>
+  <text x="108" y="130" font-size="19" font-weight="700" fill="#1a7f37">✓</text>
+  <text x="140" y="123" font-size="15" fill="#1f2328">Full cold boot automation: mode switch → insmod → wlan0 appears</text>
+  <text x="140" y="143" font-size="12.5" fill="#656d76">boot log: "insmod done; wlan=1" — zero human action</text>
+
+  <rect x="80" y="165" width="800" height="58" rx="10" fill="#dafbe1" stroke="#4ac26b" stroke-width="1.3"/>
+  <text x="108" y="200" font-size="19" font-weight="700" fill="#1a7f37">✓</text>
+  <text x="140" y="193" font-size="15" fill="#1f2328">Start app succeeds in 0.3 s (before: 4 s timeout + dead chip)</text>
+  <text x="140" y="213" font-size="12.5" fill="#656d76">same dongle, same driver source — only the patch differs</text>
+
+  <rect x="80" y="235" width="800" height="58" rx="10" fill="#dafbe1" stroke="#4ac26b" stroke-width="1.3"/>
+  <text x="108" y="270" font-size="19" font-weight="700" fill="#1a7f37">✓</text>
+  <text x="140" y="263" font-size="15" fill="#1f2328">WiFi: WPA2 4-way handshake + DHCP lease OK</text>
+  <text x="140" y="283" font-size="12.5" fill="#656d76">proxy chain (http_proxy) reaches the internet over WiFi</text>
+
+  <rect x="80" y="305" width="800" height="58" rx="10" fill="#dafbe1" stroke="#4ac26b" stroke-width="1.3"/>
+  <text x="108" y="340" font-size="19" font-weight="700" fill="#1a7f37">✓</text>
+  <text x="140" y="333" font-size="15" fill="#1f2328">Cable-removal failover: connman switches to WiFi automatically</text>
+  <text x="140" y="353" font-size="12.5" fill="#656d76">gateway / internet / DNS / proxy all reachable</text>
+
+  <rect x="80" y="375" width="800" height="42" rx="10" fill="#dafbe1" stroke="#4ac26b" stroke-width="1.3"/>
+  <text x="108" y="402" font-size="19" font-weight="700" fill="#1a7f37">✓</text>
+  <text x="140" y="402" font-size="15" fill="#1f2328">Power cycle: credentials persist, WiFi reconnects on boot</text>
+</svg>
