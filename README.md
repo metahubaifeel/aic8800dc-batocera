@@ -1,4 +1,4 @@
-# AIC8800DC 单接口版（2357:0147）：Linux / Batocera 免砖移植
+# AIC8800DC 无线网卡驱动（USB 2357:0147）：Linux / Batocera 免砖移植
 
 > 一块二十来块的 USB WiFi 网卡（AIC8800DC 芯片，USB ID `2357:0147`），
 > 用官方驱动加载会**当场假死变砖**（只能拔下来断电十秒才能救活），
@@ -7,6 +7,22 @@
 > 本仓库提供：**验证过可用的驱动补丁 + 全套开机自动化脚本 + 一份完整的踩坑记录**。
 
 > English version → [README.en.md](README.en.md)
+
+---
+
+## 实机效果（真实截图，非示意图）
+
+![Batocera 游戏机实机界面：EmulationStation 游戏墙，网络由 AIC8800DC 无线网卡提供](images/console-batocera.png)
+
+*真实游戏机（Batocera 43.1）跑起来的样子——画面里这台机器此刻正靠 AIC8800DC 无线上网，网线已拔。*
+
+![AIC8800DC 驱动冷启动 dmesg：识别 MCU1 老批次并成功启动 wlan0](images/terminal-startup.png)
+
+*真机 `dmesg`：识别出老批次（`chip_id=7, chip_mcu_id=1`）→ 走 legacy 流程 → 跳过校准固件 → **0.3 秒 `Start app` 成功** → `wlan0` 创建。开机日志 `insmod done; wlan=1`，全程无人操作。*
+
+![AIC8800DC 无线连接状态：DHCP 获取 IP、默认路由走 wlan0、外网连通](images/terminal-wifi.png)
+
+*真机网络状态：DHCP 拿到 `192.168.3.196`，默认路由走 `wlan0`，ping 外网 0% 丢包、HTTP 200。（SSID / MAC 已打码）*
 
 ---
 
@@ -195,7 +211,27 @@ touch /userdata/system/aic8800/enable-autostart
 - connman 接管瞬间的偶发段错误未根治（看门狗兜底）。
 - 只测了 `2357:0147` 这一个 ID / MCU1 批次；MCU2 及 D80 不需要本补丁。
 
-## 8. 参考
+## 8. 常见问题（FAQ）
+
+**Q：这块卡插上电脑，只出现一个 U 盘、没有 WiFi，正常吗？**
+正常，这是出厂设计。AIC8800DC 默认是"U 盘模式"（`a69c:5721`），里面装着 Windows 驱动；`eject` 一次它就会重新枚举成真正的网卡（`2357:0147`）。Linux 下用本仓库的 udev 规则可以自动完成。
+
+**Q：加载驱动后网卡突然消失，`lsusb` 也看不到，换 USB 口、重启电脑都没用——是坏了吗？**
+没坏，是芯片进入了假死状态（本仓库说的"变砖"）。**唯一解法是物理拔下来、断电 10 秒以上**（插到别的 USB 口一次也行）。原因与修复见[坑 2](#坑-2加载即变砖本仓库的核心)。
+
+**Q：AIC8800D80、或者新批次的 AIC8800DC 需要打这个补丁吗？**
+不需要。补丁只针对老批次 MCU1（`chip_id=7`、`chip_mcu_id=1`、USB ID `2357:0147`）；D80 和新批次（MCU2+）用上游驱动就能正常工作。
+
+**Q：Batocera 里 WiFi 密码都填了，为什么开机不自动连？**
+两个原因：Batocera 的 `S08connman` 只等无线网卡 15 秒（本驱动约 30 秒才加载完，必然错过）；且 `SingleConnectedTechnology=true` 时插着网线 connman 会故意不连 WiFi。用本仓库的 `boot-late.sh` 解决，详见[第 5 节](#5-batocera-集成开箱脚本)。
+
+**Q：跳过了 DPD 校准，会不会影响网速和稳定性？**
+实测无感知差异。而且如果这张卡的出厂校准数据有效，legacy 检测会自动识别并照常走正常路径（`valid_out=1`）。
+
+**Q：为什么不用官方驱动？会合并进上游吗？**
+官方驱动就是上游（`ronnyf/AIC8800-Linux-Driver`），本补丁正是打在它上面的。上游暂未包含 MCU1 老批次支持；合并前用本仓库的 patch 或 `patched-files/` 覆盖即可。
+
+## 9. 参考
 
 - 上游驱动：[ronnyf/AIC8800-Linux-Driver](https://github.com/ronnyf/AIC8800-Linux-Driver)
 - Legacy MCU1 实现参考：[shenmintao/aic8800d80](https://github.com/shenmintao/aic8800d80)（legacy-mcu1 分支）

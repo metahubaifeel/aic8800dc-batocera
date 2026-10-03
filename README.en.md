@@ -1,4 +1,4 @@
-# AIC8800DC single-interface (2357:0147): unbricked on Linux / Batocera
+# AIC8800DC USB WiFi driver (2357:0147): unbricked on Linux / Batocera
 
 > A ~$3 USB WiFi dongle (AIC8800DC, USB ID `2357:0147`) that **hard-hangs the
 > moment the vendor driver loads** — recoverable only by physically unplugging
@@ -8,6 +8,20 @@
 > write-up of every pitfall we hit.**
 
 [中文说明 (Chinese, more detailed)](README.md)
+
+## Live proof (real screenshots, not mockups)
+
+![A real Batocera console whose network is provided by the AIC8800DC USB WiFi adapter](images/console-batocera.png)
+
+*A real Batocera 43.1 console — its network right now comes from the AIC8800DC dongle (Ethernet cable unplugged).*
+
+![dmesg: AIC8800DC driver cold boot — MCU1 batch detected, Start app succeeds, wlan0 created](images/terminal-startup.png)
+
+*Real `dmesg`: MCU1 batch detected (`chip_id=7, chip_mcu_id=1`) → legacy path → calibration firmware skipped → **`Start app` succeeds in 0.3 s** → `wlan0` created. Boot log: `insmod done; wlan=1`, zero human action.*
+
+![WiFi status: DHCP lease, default route via wlan0, internet reachable](images/terminal-wifi.png)
+
+*Real network state: DHCP lease `192.168.3.196`, default route via `wlan0`, 0% ping loss, HTTP 200. (SSID / MAC masked.)*
 
 ## TL;DR
 
@@ -94,6 +108,26 @@ insmod aic8800_fdrv.ko aic_fw_path=/path/to/fw
 - DPD calibration is skipped by default (no observed impact; legacy validity
   check still reports `valid_out=1` on chips with factory calibration).
 - Occasional connman crash on Ethernet→WiFi handover is mitigated, not fixed.
+
+## FAQ
+
+**Q: The dongle shows up as a USB flash drive instead of WiFi — is it broken?**
+No. AIC8800DC ships in "flash-drive mode" (`a69c:5721`) carrying a Windows driver. A single `eject` re-enumerates it as the real NIC (`2357:0147`); the udev rule in this repo does that automatically on Linux.
+
+**Q: After loading the driver the device vanished — `lsusb` doesn't list it, replugging the port and rebooting don't help. Is it dead?**
+Not dead — the chip is hung (the "brick" this repo is about). The only recovery is a physical unplug with 10+ seconds of no power (or plugging it into another USB port once). See [TL;DR](#tldr).
+
+**Q: Do the AIC8800D80 or newer AIC8800DC batches need this patch?**
+No. It targets the older MCU1 batch only (`chip_id=7`, `chip_mcu_id=1`, USB ID `2357:0147`). D80 and MCU2+ work with the upstream driver.
+
+**Q: WiFi credentials are saved in Batocera but it never auto-connects on boot. Why?**
+Two reasons: Batocera's `S08connman` waits only 15 s for a wlan interface (this driver finishes at ~30 s), and with `SingleConnectedTechnology=true` connman deliberately will not connect WiFi while Ethernet is up. `boot-late.sh` handles both — see [Batocera specifics](#batocera-specifics).
+
+**Q: DPD calibration is skipped — does that hurt throughput or stability?**
+No difference observed in practice. When factory calibration data is valid, the legacy check detects it and the normal path runs (`valid_out=1`).
+
+**Q: Why not just use the official driver? Will this land upstream?**
+The official driver *is* upstream ([ronnyf/AIC8800-Linux-Driver](https://github.com/ronnyf/AIC8800-Linux-Driver)) — this patch applies on top. Upstream has no MCU1 support yet; until it does, use the patch or drop in `patched-files/`.
 
 ## Credits
 
